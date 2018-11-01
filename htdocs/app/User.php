@@ -27,4 +27,25 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function groups() {
+        return $this->belongsToMany('App\Group', 'users_to_groups', 'user_id', 'group_id');
+    }
+
+    public function hasRole($role) {
+        if( ! $this->roles()->exists() )
+            return false;
+        if( $this->roles()->where('slug', $role)->count() > 0 )
+            return true;
+        return false;
+    }
+
+    public function news() {
+        return $this->hasMany('App\News');
+    }
+
+    public function roles() {
+        return $this->belongsToMany('App\Role', 'users_to_roles', 'user_id', 'role_id');
+    }
+
 }

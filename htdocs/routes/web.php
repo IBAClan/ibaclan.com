@@ -17,4 +17,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::middleware(['auth'])->group(function() {
+    Route::get('/profile', 'UserController@profile')->name('profile');
+    Route::get('/profile/edit', 'UserController@profileEdit')->name('editprofile');
+    Route::post('/profile/update', 'UserController@profileUpdate')->name('updateprofile');
+});
+
+Route::get('/home', 'HomeController@index')->name('home')->middleware('role:administrator');
